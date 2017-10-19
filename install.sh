@@ -184,7 +184,7 @@ fuECHO "### Installing Updates."
 apt-get upgrade -y
 
 # Install packages needed
-apt-get install apt-transport-https ca-certificates curl dialog dnsutils dstat ethtool genisoimage git htop libpam-google-authenticator lm-sensors ntp openssh-server syslinux pv vim apache2-utils apparmor nginx aufs-tools bash-completion build-essential  cgroupfs-mount docker.io glances html2text iptables iw libltdl7 man nginx-extras nodejs npm ntp openssl psmisc python-pip -y 
+apt-get install apt-transport-https ca-certificates curl dialog dnsutils dstat ethtool genisoimage git htop libpam-google-authenticator lm-sensors ntp openssh-server syslinux-common grub2-common console-setup-linux pv vim apache2-utils apparmor nginx aufs-tools bash-completion build-essential  cgroupfs-mount docker.io glances html2text iptables iw libltdl7 man nginx-extras nodejs npm ntp openssl psmisc python-pip -y 
 
 # Let's clean up apt
 apt-get autoclean -y
@@ -218,7 +218,7 @@ while [ "$myPASS1" != "$myPASS2"  ]
         myPASS2="pass2"
     fi
   done
-htpasswd -b -c /etc/nginx/nginxpasswd $myUSER $myPASS1
+htpasswd -b -c /etc/nginx/nginxpasswd "$myUSER" "$myPASS1"
 fuECHO
 
 # Let's modify the sources list
@@ -426,6 +426,8 @@ chmod 600 /home/$myuser/.ssh/authorized_keys
 chown $myuser:$myuser /home/$myuser/.ssh /home/$myuser/.ssh/authorized_keys
 
 # Let's replace "quiet splash" options, set a console font for more screen canvas and update grub
+update-grub
+cp /usr/share/grub/default/grub /etc/default/grub
 sed -i 's#GRUB_CMDLINE_LINUX_DEFAULT="quiet splash"#GRUB_CMDLINE_LINUX_DEFAULT="consoleblank=0"#' /etc/default/grub
 sed -i 's#GRUB_CMDLINE_LINUX=""#GRUB_CMDLINE_LINUX="cgroup_enable=memory swapaccount=1"#' /etc/default/grub
 #sed -i 's#\#GRUB_GFXMODE=640x480#GRUB_GFXMODE=800x600x32#' /etc/default/grub
